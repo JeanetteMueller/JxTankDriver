@@ -87,7 +87,7 @@ void JxTankDriver::updateMotorsWith(int16_t horizontalValue, int16_t verticalVal
     _speedLeft = constrain(leftMotorSpeedTarget, -(maxSpeed), maxSpeed);
     _speedRight = constrain(rightMotorSpeedTarget, -(maxSpeed), maxSpeed);
 
-    updateSpeed(deadPoint, maxSpeed);
+    updateSpeed();
 }
 
 int16_t JxTankDriver::getCurrentSpeedLeft()
@@ -103,69 +103,61 @@ void JxTankDriver::stop()
 {
     _speedLeft = 0;
     _speedRight = 0;
-    updateSpeed(0, 10);
+    updateSpeed();
 }
 
-void JxTankDriver::updateSpeed(uint16_t deadPoint, int16_t maxSpeed)
+void JxTankDriver::updateSpeed()
 {
-    updateSpeedLeft(deadPoint, maxSpeed);
-    updateSpeedRight(deadPoint, maxSpeed);
+    updateSpeedLeft();
+    updateSpeedRight();
 }
 
-void JxTankDriver::updateSpeedLeft(uint16_t deadPoint, int16_t maxSpeed)
+void JxTankDriver::updateSpeedLeft()
 {
     if (_currentMotorTypeLeft == Direct)
     {
-        _motorLeft->setSpeed(_speedLeft);
+        updateSpeedByDirect(_motorLeft, _speedLeft);
     }
     else if (_currentMotorTypeLeft == PWMServoDriver)
     {
-        if (_speedLeft > 0)
-        {
-            uint16_t speed = map(_speedLeft, 0, maxSpeed, 0, 4095);
-            _pwmLeft.setPWM(_pinDirLeft, 0, 4095);
-            _pwmLeft.setPWM(_pinPwmLeft, 0, speed);
-        }
-        else if (_speedLeft < 0)
-        {
-            uint16_t speed = map(_speedLeft, -maxSpeed, 0, 4095, 0);
-            _pwmLeft.setPWM(_pinDirLeft, 0, 0);
-            _pwmLeft.setPWM(_pinPwmLeft, 0, speed);
-        }
-        else
-        {
-            _pwmLeft.setPWM(_pinDirLeft, 0, 0);
-            _pwmLeft.setPWM(_pinPwmLeft, 0, 0);
-        }
+        updateSpeedByPWM(_pwmLeft, _pinDirLeft, _pinPwmLeft, _speedLeft);
     }
 }
 
-void JxTankDriver::updateSpeedRight(uint16_t deadPoint, int16_t maxSpeed)
+void JxTankDriver::updateSpeedRight()
 {
     if (_currentMotorTypeRight == Direct)
     {
-        _motorRight->setSpeed(_speedRight);
+        updateSpeedByDirect(_motorRight, _speedRight);
     }
     else if (_currentMotorTypeRight == PWMServoDriver)
     {
-        if (_speedRight > 0)
-        {
-            uint16_t speed = map(_speedRight, 0, 255, 0, 4095 / 255 * maxSpeed);
+        updateSpeedByPWM(_pwmRight, _pinDirRight, _pinPwmRight, _speedRight);
+    }
+}
 
-            _pwmRight.setPWM(_pinDirRight, 0, 4095);
-            _pwmRight.setPWM(_pinPwmRight, 0, speed);
-        }
-        else if (_speedRight < 0)
-        {
-            uint16_t speed = map(_speedRight, -255, 0, 4095 / 255 * maxSpeed, 0);
+void JxTankDriver::updateSpeedByDirect(CytronMD * motor, int16_t speed)
+{
+    motor->setSpeed(speed);
+}
 
-            _pwmRight.setPWM(_pinDirRight, 0, 0);
-            _pwmRight.setPWM(_pinPwmRight, 0, speed);
-        }
-        else
-        {
-            _pwmRight.setPWM(_pinDirRight, 0, 0);
-            _pwmRight.setPWM(_pinPwmRight, 0, 0);
-        }
+void JxTankDriver::updateSpeedByPWM(Adafruit_PWMServoDriver pwm, uint8_t dirPin, uint8_t pwmPin, int16_t speed)
+{
+    if (speed > 0)
+    {
+        uint16_t setSpeed = map(speed, 0, 255, 0, 4095);
+        pwm.setPWM(dirPin, 0, 4095);
+        pwm.setPWM(pwmPin, 0, setSpeed);
+    }
+    else if (_speedRight < 0)
+    {
+        uint16_t setSpeed = map(speed, -255, 0, 4095, 0);
+        pwm.setPWM(dirPin, 0, 0);
+        pwm.setPWM(pwmPin, 0, setSpeed);
+    }
+    else
+    {
+        pwm.setPWM(dirPin, 0, 0);
+        pwm.setPWM(pwmPin, 0, 0);
     }
 }

@@ -52,9 +52,12 @@ private:
     uint8_t _pinPwmRight;
     int16_t _speedRight = 0;
 
-    void updateSpeed(uint16_t deadPoint, int16_t maxSpeed);
-    void updateSpeedLeft(uint16_t deadPoint, int16_t maxSpeed);
-    void updateSpeedRight(uint16_t deadPoint, int16_t maxSpeed);
+    void updateSpeed();
+    void updateSpeedLeft();
+    void updateSpeedRight();
+
+    void updateSpeedByDirect(CytronMD * motor, int16_t speed);
+    void updateSpeedByPWM(Adafruit_PWMServoDriver pwm, uint8_t dirPin, uint8_t pwmPin, int16_t speed);
 };
 
 #endif
