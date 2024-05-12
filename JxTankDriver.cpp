@@ -87,6 +87,16 @@ void JxTankDriver::updateMotorsWith(int16_t horizontalValue, int16_t verticalVal
     _speedLeft = constrain(leftMotorSpeedTarget, -(maxSpeed), maxSpeed);
     _speedRight = constrain(rightMotorSpeedTarget, -(maxSpeed), maxSpeed);
 
+    // Serial.print("updateMotorsWith Left ");
+    // Serial.print(leftMotorSpeedTarget);
+    // Serial.print(" Right ");
+    // Serial.print(rightMotorSpeedTarget);
+
+    // Serial.print("               Speed Left ");
+    // Serial.print(_speedLeft);
+    // Serial.print(" Right ");
+    // Serial.println(_speedRight);
+
     updateSpeed();
 }
 
@@ -136,7 +146,7 @@ void JxTankDriver::updateSpeedRight()
     }
 }
 
-void JxTankDriver::updateSpeedByDirect(CytronMD * motor, int16_t speed)
+void JxTankDriver::updateSpeedByDirect(CytronMD *motor, int16_t speed)
 {
     motor->setSpeed(speed);
 }
