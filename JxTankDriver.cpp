@@ -159,7 +159,7 @@ void JxTankDriver::updateSpeedByPWM(Adafruit_PWMServoDriver pwm, uint8_t dirPin,
         pwm.setPWM(dirPin, 0, 4095);
         pwm.setPWM(pwmPin, 0, setSpeed);
     }
-    else if (_speedRight < 0)
+    else if (speed < 0)
     {
         uint16_t setSpeed = map(speed, -255, 0, 4095, 0);
         pwm.setPWM(dirPin, 0, 0);
