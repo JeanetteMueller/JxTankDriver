@@ -2,9 +2,7 @@
 
 JxTankDriver::JxTankDriver(int16_t inputMin, int16_t inputMax, int16_t inputCenter, uint32_t analogFrequency)
 {
-  #ifdef ESP32
-
-  #elif defined(ESP8266)
+  #ifdef ESP8266
     analogWriteFreq(analogFrequency);
   #endif
     
