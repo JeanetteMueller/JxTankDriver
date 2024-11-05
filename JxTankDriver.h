@@ -3,7 +3,13 @@
 #define JxTankDriver_h
 
 #include "Arduino.h"
+
+#if defined(ESP32)
+#include <CytronMotorDriverEsp32.h>
+#elif defined(ESP8266)
 #include <CytronMotorDriver.h>
+#endif
+
 #include <Adafruit_PWMServoDriver.h>
 
 class JxTankDriver
