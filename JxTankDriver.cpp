@@ -2,10 +2,9 @@
 
 JxTankDriver::JxTankDriver(int16_t inputMin, int16_t inputMax, int16_t inputCenter, uint32_t analogFrequency)
 {
-  #ifdef ESP8266
+#ifdef ESP8266
     analogWriteFreq(analogFrequency);
-  #endif
-    
+#endif
 
     _inputMin = inputMin;
     _inputMax = inputMax;
@@ -22,7 +21,7 @@ void JxTankDriver::setupLeftMotor(MODE mode, uint8_t pin1, uint8_t pin2)
         _isReadyLeft = true;
     }
 }
-void JxTankDriver::setupLeftMotor(Adafruit_PWMServoDriver pwm, uint8_t pinDir, uint8_t pinPwm)
+void JxTankDriver::setupLeftMotor(Adafruit_PWMServoDriver *pwm, uint8_t pinDir, uint8_t pinPwm)
 {
     if (_isReadyLeft != true)
     {
@@ -45,7 +44,7 @@ void JxTankDriver::setupRightMotor(MODE mode, uint8_t pin1, uint8_t pin2)
         _isReadyRight = true;
     }
 }
-void JxTankDriver::setupRightMotor(Adafruit_PWMServoDriver pwm, uint8_t pinDir, uint8_t pinPwm)
+void JxTankDriver::setupRightMotor(Adafruit_PWMServoDriver *pwm, uint8_t pinDir, uint8_t pinPwm)
 {
     if (_isReadyRight != true)
     {
@@ -154,23 +153,23 @@ void JxTankDriver::updateSpeedByDirect(CytronMD *motor, int16_t speed)
     motor->setSpeed(speed);
 }
 
-void JxTankDriver::updateSpeedByPWM(Adafruit_PWMServoDriver pwm, uint8_t dirPin, uint8_t pwmPin, int16_t speed)
+void JxTankDriver::updateSpeedByPWM(Adafruit_PWMServoDriver *pwm, uint8_t dirPin, uint8_t pwmPin, int16_t speed)
 {
     if (speed > 0)
     {
         uint16_t setSpeed = map(speed, 0, 255, 0, 4095);
-        pwm.setPWM(dirPin, 0, 4095);
-        pwm.setPWM(pwmPin, 0, setSpeed);
+        pwm->setPWM(dirPin, 0, 4095);
+        pwm->setPWM(pwmPin, 0, setSpeed);
     }
     else if (speed < 0)
     {
         uint16_t setSpeed = map(speed, -255, 0, 4095, 0);
-        pwm.setPWM(dirPin, 0, 0);
-        pwm.setPWM(pwmPin, 0, setSpeed);
+        pwm->setPWM(dirPin, 0, 0);
+        pwm->setPWM(pwmPin, 0, setSpeed);
     }
     else
     {
-        pwm.setPWM(dirPin, 0, 0);
-        pwm.setPWM(pwmPin, 0, 0);
+        pwm->setPWM(dirPin, 0, 0);
+        pwm->setPWM(pwmPin, 0, 0);
     }
 }

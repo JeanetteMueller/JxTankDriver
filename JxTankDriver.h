@@ -26,10 +26,10 @@ public:
     JxTankDriver(int16_t inputMin, int16_t inputMax, int16_t inputCenter, uint32_t analogFrequenc = 18000);
 
     void setupLeftMotor(MODE mode, uint8_t pin1, uint8_t pin2);
-    void setupLeftMotor(Adafruit_PWMServoDriver pwm, uint8_t pinDir, uint8_t pinPwm);
+    void setupLeftMotor(Adafruit_PWMServoDriver *pwm, uint8_t pinDir, uint8_t pinPwm);
 
     void setupRightMotor(MODE mode, uint8_t pin1, uint8_t pin2);
-    void setupRightMotor(Adafruit_PWMServoDriver pwm, uint8_t pinDir, uint8_t pinPwm);
+    void setupRightMotor(Adafruit_PWMServoDriver *pwm, uint8_t pinDir, uint8_t pinPwm);
 
     void updateMotorsWith(int16_t horizontalValue, int16_t verticalValue, uint16_t deadPoint, int16_t maxSpeed = 255);
     
@@ -45,7 +45,7 @@ private:
     MotorType _currentMotorTypeLeft;
     CytronMD *_motorLeft;
     bool _isReadyLeft = false;
-    Adafruit_PWMServoDriver _pwmLeft;
+    Adafruit_PWMServoDriver *_pwmLeft;
     uint8_t _pinDirLeft;
     uint8_t _pinPwmLeft;
     int16_t _speedLeft = 0;
@@ -53,7 +53,7 @@ private:
     MotorType _currentMotorTypeRight;
     CytronMD *_motorRight;
     bool _isReadyRight = false;
-    Adafruit_PWMServoDriver _pwmRight;
+    Adafruit_PWMServoDriver *_pwmRight;
     uint8_t _pinDirRight;
     uint8_t _pinPwmRight;
     int16_t _speedRight = 0;
@@ -63,7 +63,7 @@ private:
     void updateSpeedRight();
 
     void updateSpeedByDirect(CytronMD * motor, int16_t speed);
-    void updateSpeedByPWM(Adafruit_PWMServoDriver pwm, uint8_t dirPin, uint8_t pwmPin, int16_t speed);
+    void updateSpeedByPWM(Adafruit_PWMServoDriver *pwm, uint8_t dirPin, uint8_t pwmPin, int16_t speed);
 };
 
 #endif
