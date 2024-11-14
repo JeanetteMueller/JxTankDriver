@@ -11,13 +11,19 @@ JxTankDriver::JxTankDriver(int16_t inputMin, int16_t inputMax, int16_t inputCent
     _inputCenter = inputCenter;
 }
 
-void JxTankDriver::setupLeftMotor(MODE mode, uint8_t pin1, uint8_t pin2)
+void JxTankDriver::setupLeftMotor(MODE mode, uint8_t pin1, uint8_t pin2, uint8_t channel, uint8_t resolution, uint32_t frequency)
 {
     if (_isReadyLeft != true)
     {
+#if defined(ESP32)
+        _motorLeft = new CytronMD(mode, pin1, pin2, channel, frequency, resolution);
+#elif defined(ESP8266)
         _motorLeft = new CytronMD(mode, pin1, pin2);
+#endif
         _speedLeft = 0;
         _motorLeft->setSpeed(_speedLeft);
+
+        _currentMotorTypeLeft = Direct;
         _isReadyLeft = true;
     }
 }
@@ -34,13 +40,19 @@ void JxTankDriver::setupLeftMotor(Adafruit_PWMServoDriver *pwm, uint8_t pinDir, 
     }
 }
 
-void JxTankDriver::setupRightMotor(MODE mode, uint8_t pin1, uint8_t pin2)
+void JxTankDriver::setupRightMotor(MODE mode, uint8_t pin1, uint8_t pin2, uint8_t channel, uint8_t resolution, uint32_t frequency)
 {
     if (_isReadyRight != true)
     {
+#if defined(ESP32)
+        _motorRight = new CytronMD(mode, pin1, pin2, channel, frequency, resolution);
+#elif defined(ESP8266)
         _motorRight = new CytronMD(mode, pin1, pin2);
+#endif
         _speedRight = 0;
         _motorRight->setSpeed(_speedRight);
+
+        _currentMotorTypeRight = Direct;
         _isReadyRight = true;
     }
 }
@@ -150,6 +162,9 @@ void JxTankDriver::updateSpeedRight()
 
 void JxTankDriver::updateSpeedByDirect(CytronMD *motor, int16_t speed)
 {
+    Serial.print("updateSpeedByDirect: ");
+    Serial.println(speed);
+
     motor->setSpeed(speed);
 }
 

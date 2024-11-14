@@ -25,10 +25,10 @@ public:
 
     JxTankDriver(int16_t inputMin, int16_t inputMax, int16_t inputCenter, uint32_t analogFrequenc = 18000);
 
-    void setupLeftMotor(MODE mode, uint8_t pin1, uint8_t pin2);
+    void setupLeftMotor(MODE mode, uint8_t pin1, uint8_t pin2, uint8_t channel = 2, uint8_t resolution = 10, uint32_t frequency = 20000);
     void setupLeftMotor(Adafruit_PWMServoDriver *pwm, uint8_t pinDir, uint8_t pinPwm);
 
-    void setupRightMotor(MODE mode, uint8_t pin1, uint8_t pin2);
+    void setupRightMotor(MODE mode, uint8_t pin1, uint8_t pin2, uint8_t channel = 4, uint8_t resolution = 10, uint32_t frequency = 20000);
     void setupRightMotor(Adafruit_PWMServoDriver *pwm, uint8_t pinDir, uint8_t pinPwm);
 
     void updateMotorsWith(int16_t horizontalValue, int16_t verticalValue, uint16_t deadPoint, int16_t maxSpeed = 255);
